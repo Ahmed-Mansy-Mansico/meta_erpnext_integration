@@ -227,3 +227,8 @@ app_license = "mit"
 # 	"Logging DocType Name": 30  # days to retain logs
 # }
 
+
+# override server scripts safe_exec
+import frappe.utils.safe_exec as _frappe_safe_exec
+import meta_facebook_leads.overrides as _meta_facebook_leads_overrides
+_frappe_safe_exec.safe_exec = _meta_facebook_leads_overrides.safe_exec

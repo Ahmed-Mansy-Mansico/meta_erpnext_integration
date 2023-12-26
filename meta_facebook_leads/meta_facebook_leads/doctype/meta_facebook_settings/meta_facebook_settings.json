@@ -1,0 +1,105 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-12-20 02:13:14.803692",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_0lkx",
+  "last_sync_datetime",
+  "app_secret",
+  "audience_name",
+  "pixel_id",
+  "graph_api_version",
+  "column_break_nezf",
+  "access_token",
+  "ad_account_id",
+  "audience_retention_days",
+  "app_id",
+  "api_url"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_0lkx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_nezf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "last_sync_datetime",
+   "fieldtype": "Float",
+   "label": "last sync datetime",
+   "read_only": 1
+  },
+  {
+   "fieldname": "app_secret",
+   "fieldtype": "Data",
+   "label": "app_secret"
+  },
+  {
+   "fieldname": "audience_name",
+   "fieldtype": "Data",
+   "label": "audience_name"
+  },
+  {
+   "fieldname": "pixel_id",
+   "fieldtype": "Data",
+   "label": "pixel_id"
+  },
+  {
+   "fieldname": "ad_account_id",
+   "fieldtype": "Data",
+   "label": "ad_account_id"
+  },
+  {
+   "fieldname": "audience_retention_days",
+   "fieldtype": "Data",
+   "label": "audience_retention_days"
+  },
+  {
+   "fieldname": "app_id",
+   "fieldtype": "Data",
+   "label": "app_id"
+  },
+  {
+   "fieldname": "graph_api_version",
+   "fieldtype": "Data",
+   "label": "Graph API Version"
+  },
+  {
+   "fieldname": "api_url",
+   "fieldtype": "Data",
+   "label": "API URL"
+  },
+  {
+   "fieldname": "access_token",
+   "fieldtype": "Data",
+   "label": "Access Tocken"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2023-12-26 17:23:28.690376",
+ "modified_by": "Administrator",
+ "module": "Meta Facebook Leads",
+ "name": "Meta Facebook Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
