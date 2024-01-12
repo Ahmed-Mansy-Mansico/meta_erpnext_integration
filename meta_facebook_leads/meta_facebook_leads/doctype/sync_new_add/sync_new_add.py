@@ -20,11 +20,11 @@ curl -i -X GET \
 import requests
 import json
 class Request:
-    def __init__(self, url, version, page_id, method="GET", params=None):
+    def __init__(self, url, version, page_id, f_payload=None, params=None):
         self.url = url
         self.version = 'v' + str(version)
         self.page_id = page_id
-        self.method = method
+        self.f_payload = f_payload
         self.params = params
     @property
     def get_url(self):
@@ -74,7 +74,7 @@ class AppendForms():
     def append_forms(self):
         if self.doc.force_fetch:
             self.doc.set("table_hsya", [])
-            for lead_form in self.lead_forms:
+            for lead_form in self.lead_forms.get("data"):
                 self.doc.append("table_hsya", {
                     "form_id": lead_form.get("id"),
                     "form_name": lead_form.get("name"),
@@ -92,8 +92,7 @@ class ServerScript():
             "doctype": "Server Script",
             "name": str(str(self.doc.name).replace("-", "_")).lower(),
             "script_type": "Scheduler Event",
-            "event_frequency": "Cron",
-            "cron_format": "*/30 * * * *",
+            "event_frequency": self.doc.event_frequency,
             "module": "Meta Facebook Leads",
             "script": self.generate_script()
         })
@@ -106,6 +105,25 @@ class ServerScript():
         _script += """fetch.fetch_leads()\n"""
         return _script
     
+
+
+class RequestSendLead():
+    def __init__(self, request):
+        self.request = request
+    def send_lead(self):
+        response = requests.post(self.request.get_url, params=self.request.params, json=self.request.f_payload) 
+        if frappe._dict(response.json()).get("error"):
+            error_message = ""
+            error_message += "url" + " : " + str(self.request.get_url) + "<br>"
+            error_message += "params" + " : " + str(self.request.params) + "<br>"
+            error_message += "<br>"
+            for key in json.dumps(response.json()).get("error").keys():
+                error_message += key + " : " + str(json.dumps(response.json()).get("error").get(key)) + "<br>"
+            frappe.throw(error_message, title="Error")
+        else:
+            return json.dumps(response.json())
+
+
 class FetchLeads():
     def __init__(self, name):
         self.name = name
@@ -142,7 +160,7 @@ class FetchLeads():
             request_lead_gen_forms = RequestLeadGenFroms(request)
             # get lead forms
             request_lead_gen_forms.get_lead_forms()
-            if request_lead_gen_forms.lead_forms:
+            if request_lead_gen_forms.lead_forms.get("data"):
                 # use self.lead_forms
                 # fetch all leads then create them using create_lead
                 # filter leads by created_time and id to avoid duplication
@@ -162,6 +180,7 @@ class FetchLeads():
                 self.create_lead(lead_forms.get("data"))
             return lead_forms
     def create_lead(self, leads):
+        import traceback
         for lead in leads:
             if not frappe.db.exists("Lead", {"email_id": lead.get("field_data")[1].get("values")[0]}):
                 new_lead = frappe.get_doc({
@@ -173,7 +192,52 @@ class FetchLeads():
                     "company_name": lead.get("field_data")[4].get("values")[0],
                     "custom_lead_json" : frappe._dict(lead),
                 })
-                new_lead.insert(ignore_permissions=True)
+                try:
+                    new_lead.insert(ignore_permissions=True)
+                    # create lead in facebook
+                    FetchLeads.create_lead_in_facebook(new_lead)
+                except Exception as e:
+
+                    frappe.log_error( "error",str(e))
+                    frappe.log_error( "traceback", str(traceback.format_exc()))
+                    frappe.log_error( "new_lead", str(new_lead))
+    
+    @staticmethod
+    def create_lead_in_facebook(lead):
+        import datetime
+        import json
+        from meta_facebook_leads.meta_facebook_leads.doctype.sync_new_add.meta_integraion_objects import UserData, CustomData, Payload
+        import ast
+        now = datetime.datetime.now()
+        unixtime = int(now.timestamp())
+        if lead.custom_lead_json:
+            payload = Payload(
+                event_name=lead.status,
+                event_time=unixtime ,
+                action_source="system_generated",
+                user_data=UserData(lead.custom_lead_json.get("id") if not isinstance(lead.custom_lead_json, str) else json.loads(lead.custom_lead_json).get("id")).__dict__,
+                custom_data=CustomData("crm", "ERP next").__dict__
+            )    
+            f_payload = frappe._dict({"data": [payload.__dict__]})
+            # send request to facebook
+            defaults = get_credentials()
+            #  init Request
+            request = Request(defaults.api_url, defaults.graph_api_version,
+            defaults.pixel_id + "/events", f_payload, params={"access_token": defaults.pixel_access_token})
+            # init RequestSendLead
+            request_send_lead = RequestSendLead(request)
+            # send lead
+            response = request_send_lead.send_lead()
+            #  insert to note with
+            note = frappe.get_doc({
+                "doctype": "Note",
+                "title": "Lead Created in Facebook Successfully",
+                "public": 1,
+                "content": "Lead Created in Facebook Successfully <br> Response: " 
+                + str(response) + "<br> Payload: " + str(f_payload),
+                "custom_reference_name": lead.name,
+            })
+            note.insert(ignore_permissions=True)
 
 class SyncNewAdd(Document):
     def validate(self):

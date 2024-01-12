@@ -20,6 +20,7 @@
   "page_id",
   "form_id",
   "column_break_blgv",
+  "event_frequency",
   "meta_forms_section",
   "force_fetch",
   "table_hsya"
@@ -125,12 +126,18 @@
    "fieldname": "force_fetch",
    "fieldtype": "Check",
    "label": "Force Fetch"
+  },
+  {
+   "fieldname": "event_frequency",
+   "fieldtype": "Select",
+   "label": "Event Frequency",
+   "options": "All\nHourly\nDaily\nWeekly\nMonthly\nYearly\nHourly Long\nDaily Long\nWeekly Long\nMonthly Long"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-12-26 20:20:45.823356",
+ "modified": "2024-01-12 03:02:12.085693",
  "modified_by": "Administrator",
  "module": "Meta Facebook Leads",
  "name": "Sync New Add",

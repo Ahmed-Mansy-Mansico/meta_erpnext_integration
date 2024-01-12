@@ -10,6 +10,8 @@ from facebook_business.adobjects.lead import Lead
 from facebook_business.api import FacebookAdsApi
 from facebook_business.adobjects.adaccount import AdAccount
 
+
+
 @frappe.whitelist()
 def get_credentials():
     return frappe.get_doc("Meta Facebook Settings")
@@ -21,11 +23,11 @@ import requests
 import json
 
 class Request:
-    def __init__(self, url, version, page_id, method="GET", params=None):
+    def __init__(self, url, version, page_id, f_payload=None, params=None):
         self.url = url
         self.version = 'v' + str(version)
         self.page_id = page_id
-        self.method = method
+        self.f_payload = f_payload
         self.params = params
     @property
     def get_url(self):
@@ -104,7 +106,23 @@ class ServerScript():
         script += "fetch_leads = FetchLeads(\"" + self.doc.name + "\")\n"
         script += "fetch_leads.fetch_leads()\n"
         return script
-    
+
+class RequestSendLead():
+    def __init__(self, request):
+        self.request = request
+    def send_lead(self):
+        response = requests.post(self.request.get_url, params=self.request.params, json=self.request.f_payload) 
+        if json.dumps(response.json()).get("error"):
+            error_message = ""
+            error_message += "url" + " : " + str(self.request.get_url) + "<br>"
+            error_message += "params" + " : " + str(self.request.params) + "<br>"
+            error_message += "<br>"
+            for key in json.dumps(response.json()).get("error").keys():
+                error_message += key + " : " + str(json.dumps(response.json()).get("error").get(key)) + "<br>"
+            frappe.throw(error_message, title="Error")
+        else:
+            return json.dumps(response.json())
+
 class FetchLeads():
     def __init__(self, name):
         self.name = name
@@ -161,15 +179,50 @@ class FetchLeads():
                 self.create_lead(self.lead_forms)
             return lead_forms
     def create_lead(self, leads):
+        impot
         for lead in leads:
             if not frappe.db.exists("Lead", {"custom_lead_json": json.dumps(lead)}):
                 new_lead = frappe.get_doc({
                     "doctype": "Lead",
                     "first_name": lead.get("field_data")[0].get("values")[0],
                     "email_id": lead.get("field_data")[1].get("values")[0],
-                    "mobile_no": lead.get("field_data")[2].get("values")[0],
+                    "mobile_no": lead.get("field_data")[2].get("values")[0] ,
                     "job_title" : lead.get("field_data")[3].get("values")[0],
                     "company_name": lead.get("field_data")[4].get("values")[0],
                     "custom_lead_json" : json.dumps(lead),
                 })
-                new_lead.insert(ignore_permissions=True)
+                try:
+                    new_lead.insert(ignore_permissions=True)
+                    # create lead in facebook
+                    self.create_lead_in_facebook(new_lead)
+                except Exception as e:
+                    frappe.log_error(str(e), "error")
+                    frappe.log_error(str(lead), "lead")
+                    frappe.log_error(str(new_lead), "new_lead")
+    def create_lead_in_facebook(self, lead):
+        import datetime
+        import json
+        from meta_facebook_leads.meta_facebook_leads.doctype.sync_new_add.meta_integraion_objects import UserData, CustomData, Payload
+        now = datetime.datetime.now()
+        unixtime = int(now.timestamp())
+        if lead.custom_lead_json:
+            payload = Payload(
+                event_name=lead.status,
+                event_time=unixtime ,
+                action_source="system_generated",
+                user_data=UserData(frappe._dict(lead.custom_lead_json.get("id"))).__dict__,
+                custom_data=CustomData("crm", "ERPNext CRM").__dict__
+            )    
+            f_payload = frappe._dict({"data": [payload.__dict__]})
+            # send request to facebook
+            defaults = get_credentials()
+            #  init Request
+            request = Request(defaults.api_url, defaults.graph_api_version,
+            defaults.pixel_id + "/events", f_payload, params={"access_token": defaults.pixel_access_token})
+            # init RequestSendLead
+            request_send_lead = RequestSendLead(request)
+            # send lead
+            response = request_send_lead.send_lead()
+            frappe.log_error(str(response), "response")
+
+

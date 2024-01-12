@@ -130,6 +130,13 @@ app_license = "mit"
 # 	}
 # }
 
+doc_events = {
+    "Lead": {
+        # will run before a ToDo record is inserted into database
+        "validate": "meta_facebook_leads.overrides.validate_lead",
+    }
+}
+
 # Scheduled Tasks
 # ---------------
 

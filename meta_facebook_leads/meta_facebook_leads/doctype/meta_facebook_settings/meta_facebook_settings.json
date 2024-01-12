@@ -10,6 +10,7 @@
   "app_secret",
   "audience_name",
   "pixel_id",
+  "pixel_access_token",
   "graph_api_version",
   "column_break_nezf",
   "access_token",
@@ -46,7 +47,9 @@
   {
    "fieldname": "pixel_id",
    "fieldtype": "Data",
-   "label": "pixel_id"
+   "in_list_view": 1,
+   "label": "pixel_id",
+   "reqd": 1
   },
   {
    "fieldname": "ad_account_id",
@@ -66,23 +69,35 @@
   {
    "fieldname": "graph_api_version",
    "fieldtype": "Data",
-   "label": "Graph API Version"
+   "in_list_view": 1,
+   "label": "Graph API Version",
+   "reqd": 1
   },
   {
    "fieldname": "api_url",
    "fieldtype": "Data",
-   "label": "API URL"
+   "label": "API URL",
+   "reqd": 1
   },
   {
    "fieldname": "access_token",
    "fieldtype": "Data",
-   "label": "Access Tocken"
+   "in_list_view": 1,
+   "label": "Access Tocken",
+   "reqd": 1
+  },
+  {
+   "fieldname": "pixel_access_token",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Pixel Access Token",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-12-26 17:23:28.690376",
+ "modified": "2024-01-12 03:05:02.200880",
  "modified_by": "Administrator",
  "module": "Meta Facebook Leads",
  "name": "Meta Facebook Settings",
