@@ -1,7 +1,7 @@
 
 # Mansico-Meta Integration ERPnext
-<div align="center">
-    <img src="[https://yt3.ggpht.com/ytc/AIf8zZTwR4fr-htnOWgnTwanWEqyBDA9TVIiGc8ILmum=s600-c-k-c0x00ffffff-no-rj-rp-mos](https://drive.usercontent.google.com/u/0/uc?id=112KckYo8ZiGFR2rrU8Wtkdits3jH_3j4&export=download)" height="128">
+<div align="center">![Uploading unnamed.jpg…]()
+![unnamed](https://github.com/splinter-NGoH/meta_erpnext_integration/assets/73743592/47710052-b0d4-4776-8ec7-d13ed3a3c135)
     <h2> Mansico-Meta</h2>
 </div>
 
