@@ -1,7 +1,7 @@
 
 # Mansico-Meta Integration ERPnext
 <div align="center">
-    <img src="https://yt3.ggpht.com/ytc/AIf8zZTwR4fr-htnOWgnTwanWEqyBDA9TVIiGc8ILmum=s600-c-k-c0x00ffffff-no-rj-rp-mos" height="128">
+    <img src="[https://yt3.ggpht.com/ytc/AIf8zZTwR4fr-htnOWgnTwanWEqyBDA9TVIiGc8ILmum=s600-c-k-c0x00ffffff-no-rj-rp-mos](https://drive.usercontent.google.com/u/0/uc?id=112KckYo8ZiGFR2rrU8Wtkdits3jH_3j4&export=download)" height="128">
     <h2> Mansico-Meta</h2>
 </div>
 
