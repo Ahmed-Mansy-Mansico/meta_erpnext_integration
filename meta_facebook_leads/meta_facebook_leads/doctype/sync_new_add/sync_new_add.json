@@ -11,9 +11,8 @@
   "column_break_jjze",
   "naming_series",
   "ad_details_section",
-  "read_by",
+  "column_break_upkw",
   "column_break_htek",
-  "based_on",
   "column_break_zbhi",
   "last_sync_time",
   "section_break_msmq",
@@ -58,14 +57,6 @@
    "label": "AD Details"
   },
   {
-   "fieldname": "read_by",
-   "fieldtype": "Link",
-   "in_list_view": 1,
-   "label": "Read",
-   "options": "Read By",
-   "reqd": 1
-  },
-  {
    "fetch_from": "read_by.last_sync_time",
    "fieldname": "last_sync_time",
    "fieldtype": "Float",
@@ -77,14 +68,6 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "based_on",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Based On",
-   "options": "\nPage ID",
-   "reqd": 1
-  },
-  {
    "fieldname": "column_break_zbhi",
    "fieldtype": "Column Break"
   },
@@ -93,12 +76,12 @@
    "fieldtype": "Section Break"
   },
   {
-   "depends_on": "eval:doc.based_on==\"Page ID\"",
    "fieldname": "page_id",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Page ID",
-   "mandatory_depends_on": "eval:doc.based_on==\"Page ID\"",
-   "options": "Page ID"
+   "options": "Page ID",
+   "reqd": 1
   },
   {
    "fieldname": "meta_forms_section",
@@ -132,12 +115,16 @@
    "fieldtype": "Select",
    "label": "Event Frequency",
    "options": "All\nHourly\nDaily\nWeekly\nMonthly\nYearly\nHourly Long\nDaily Long\nWeekly Long\nMonthly Long"
+  },
+  {
+   "fieldname": "column_break_upkw",
+   "fieldtype": "Column Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-01-12 03:02:12.085693",
+ "modified": "2024-09-23 20:43:00.973832",
  "modified_by": "Administrator",
  "module": "Meta Facebook Leads",
  "name": "Sync New Add",

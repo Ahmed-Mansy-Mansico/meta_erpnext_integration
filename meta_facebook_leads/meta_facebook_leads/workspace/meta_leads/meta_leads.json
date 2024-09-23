@@ -17,7 +17,8 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Facebook Integration",
-   "link_count": 4,
+   "link_count": 7,
+   "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
   },
@@ -60,9 +61,39 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Scheduled Job Type",
+   "link_count": 0,
+   "link_to": "Scheduled Job Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Leads",
+   "link_count": 0,
+   "link_to": "Lead",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Notes",
+   "link_count": 0,
+   "link_to": "Note",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2023-12-26 23:07:12.388941",
+ "modified": "2024-02-15 10:05:59.680115",
  "modified_by": "Administrator",
  "module": "Meta Facebook Leads",
  "name": "Meta Leads",
